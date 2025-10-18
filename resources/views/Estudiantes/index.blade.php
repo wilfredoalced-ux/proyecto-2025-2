@@ -4,7 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>🎓 Lista de Estudiantes</title>
-  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gradient-to-b from-blue-100 to-indigo-200 min-h-screen py-10">
 
@@ -22,7 +23,7 @@
 
     <div class="text-center mb-4">
       <a href="{{ route('estudiantes.create') }}" 
-         class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-5 rounded-full shadow">
+         class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-5 rounded-full shadow transition duration-300">
         ➕ Agregar Estudiante
       </a>
     </div>
@@ -37,6 +38,8 @@
             <th class="p-3 text-left">🧾 Primer Apellido</th>
             <th class="p-3 text-left">🧾 Segundo Apellido</th>
             <th class="p-3 text-left">🪪 DNI</th>
+            <th class="p-3 text-center">✏️ Editar</th>
+            <th class="p-3 text-center">🗑️ Eliminar</th>
           </tr>
         </thead>
         <tbody>
@@ -48,10 +51,32 @@
               <td class="p-3 text-gray-700">{{ $estudiante->pri_ape }}</td>
               <td class="p-3 text-gray-700">{{ $estudiante->seg_ape }}</td>
               <td class="p-3 text-gray-700">{{ $estudiante->dni }}</td>
+              
+              {{-- Botón Editar --}}
+              <td class="p-3 text-center">
+                <a href="{{ route('estudiantes.edit', $estudiante->id) }}" 
+                   class="inline-flex items-center bg-yellow-400 hover:bg-yellow-500 text-white font-semibold py-1 px-3 rounded shadow transition duration-300">
+                   <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536M9 11l6-6m2 2l-6 6m-3 4v3h3l7-7-3-3-7 7z" />
+                   </svg>
+                   Editar
+                </a>
+              </td>
+
+              {{-- Botón Eliminar --}}
+              <td class="p-3 text-center">
+                <form action="{{ route('estudiantes.destroy', $estudiante->id) }}" method="POST" onsubmit="return confirm('¿Estás seguro de eliminar este estudiante?');" class="inline">
+                  @csrf
+                  @method('DELETE')
+                  <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-1 px-3 rounded shadow transition duration-300">
+                    Eliminar
+                  </button>
+                </form>
+              </td>
             </tr>
           @empty
             <tr>
-              <td colspan="6" class="text-center p-4 text-gray-600">📭 No hay estudiantes registrados.</td>
+              <td colspan="8" class="text-center p-4 text-gray-600">📭 No hay estudiantes registrados.</td>
             </tr>
           @endforelse
         </tbody>

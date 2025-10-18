@@ -36,4 +36,37 @@ class EstudianteController extends Controller
 
         return redirect()->route('estudiantes.index')->with('success', 'Estudiante agregado correctamente.');
     }
+
+    // Mostrar formulario para editar estudiante
+    public function edit($id)
+    {
+        $estudiante = Estudiante::findOrFail($id);
+        return view('Estudiantes.edit', compact('estudiante'));
+    }
+
+    // Actualizar estudiante
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'codigo' => 'required|string|max:10',
+            'nombres' => 'required|string|max:50',
+            'pri_ape' => 'required|string|max:50',
+            'seg_ape' => 'nullable|string|max:50',
+            'dni' => 'required|string|max:15',
+        ]);
+
+        $estudiante = Estudiante::findOrFail($id);
+        $estudiante->update($request->all());
+
+        return redirect()->route('estudiantes.index')->with('success', 'Estudiante actualizado correctamente.');
+    }
+
+    // Eliminar estudiante
+    public function destroy($id)
+    {
+        $estudiante = Estudiante::findOrFail($id);
+        $estudiante->delete();
+
+        return redirect()->route('estudiantes.index')->with('success', 'Estudiante eliminado correctamente.');
+    }
 }
